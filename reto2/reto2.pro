@@ -10,7 +10,8 @@ SOURCES += \
         main.cpp \
         cadena.cpp \
         fecha.cpp \
-        matrizadyacencia.cpp
+        matrizadyacencia.cpp \
+        mensaje.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -23,4 +24,5 @@ HEADERS += \
     Nodo.h \
     cadena.h \
     fecha.h \
-    matrizadyacencia.h
+    matrizadyacencia.h \
+    mensaje.h

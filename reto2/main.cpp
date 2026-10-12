@@ -29,7 +29,7 @@ int main() {
     }
 
     std::cout << "\n===========================================" << std::endl;
-    std::cout << " PRUEBAS DE FUNCIONALIDAD: ARREGLO DINÁMICO " << std::endl;
+    std::cout << " PRUEBAS DE FUNCIONALIDAD: ARREGLO DINAMICO " << std::endl;
     std::cout << "===========================================" << std::endl;
 
     ArregloDinamico<int> arregloUsuarios;
@@ -63,7 +63,6 @@ int main() {
     std::cout << "¿Son amigos 0 y 1? " << (red.estanConectados(0, 1) ? "SI" : "NO") << std::endl;
     std::cout << "¿Son amigos 0 y 3? " << (red.estanConectados(0, 3) ? "SI" : "NO") << std::endl;
 
-    // Probamos el cálculo de amigos en común entre el Usuario 0 y el Usuario 3
     // Ambos son amigos del Usuario 1, por lo que deberían tener 1 amigo en común.
     int comunes = red.obtenerAmigosEnComun(0, 3);
     std::cout << "Amigos en comun entre Usuario 0 y Usuario 3: " << comunes << std::endl;
