@@ -8,6 +8,7 @@ CONFIG += c++17 cmdline
 
 SOURCES += \
         GestorArchivos.cpp \
+        MedidorRecursos.cpp \
         Usuario.cpp \
         main.cpp \
         cadena.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     ArregloDinamico.h \
     GestorArchivos.h \
     ListaEnlazada.h \
+    MedidorRecursos.h \
     Nodo.h \
     Usuario.h \
     cadena.h \
