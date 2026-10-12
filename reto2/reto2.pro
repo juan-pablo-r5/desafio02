@@ -7,6 +7,7 @@ CONFIG += c++17 cmdline
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        Usuario.cpp \
         main.cpp \
         cadena.cpp \
         fecha.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     ArregloDinamico.h \
     ListaEnlazada.h \
     Nodo.h \
+    Usuario.h \
     cadena.h \
     fecha.h \
     matrizadyacencia.h \
