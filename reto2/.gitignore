@@ -34,11 +34,9 @@ Thumbs.db
 *.rc
 /.qmake.cache
 /.qmake.stash
-**/.qmlls.ini
 
 # qtcreator generated files
 *.pro.user*
-*.qbs.user*
 CMakeLists.txt.user*
 
 # xemacs temporary files
@@ -74,11 +72,3 @@ CMakeLists.txt.user*
 *.dll
 *.exe
 
-# Directories with generated files
-.moc/
-.obj/
-.pch/
-.rcc/
-.uic/
-/build*/
-/.qtcreator/
