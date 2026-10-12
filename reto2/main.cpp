@@ -1,6 +1,7 @@
 #include <iostream>
 #include "ListaEnlazada.h"
 #include "ArregloDinamico.h"
+#include "MatrizAdyacencia.h"
 
 int main() {
     std::cout << "===========================================" << std::endl;
@@ -49,6 +50,23 @@ int main() {
     arregloUsuarios.eliminar(0); // Elimina el primer elemento
     std::cout << "\nDespues de eliminar el primer elemento del arreglo (Nuevo tamano: " << arregloUsuarios.getTamano() << "):" << std::endl;
     std::cout << " -> Nuevo elemento en el indice 0: " << arregloUsuarios.obtener(0) << std::endl;
+
+    // Creamos una red para 5 usuarios (índices 0 a 4)
+    MatrizAdyacencia red(5);
+
+    // Establecemos conexiones de amistad
+    red.conectar(0, 1); // Usuario 0 es amigo de Usuario 1
+    red.conectar(0, 2); // Usuario 0 es amigo de Usuario 2
+    red.conectar(1, 2); // Usuario 1 es amigo de Usuario 2
+    red.conectar(1, 3); // Usuario 1 es amigo de Usuario 3
+
+    std::cout << "¿Son amigos 0 y 1? " << (red.estanConectados(0, 1) ? "SI" : "NO") << std::endl;
+    std::cout << "¿Son amigos 0 y 3? " << (red.estanConectados(0, 3) ? "SI" : "NO") << std::endl;
+
+    // Probamos el cálculo de amigos en común entre el Usuario 0 y el Usuario 3
+    // Ambos son amigos del Usuario 1, por lo que deberían tener 1 amigo en común.
+    int comunes = red.obtenerAmigosEnComun(0, 3);
+    std::cout << "Amigos en comun entre Usuario 0 y Usuario 3: " << comunes << std::endl;
 
     return 0;
 }

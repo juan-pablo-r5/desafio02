@@ -9,7 +9,8 @@ CONFIG += c++17 cmdline
 SOURCES += \
         main.cpp \
         cadena.cpp \
-        fecha.cpp
+        fecha.cpp \
+        matrizadyacencia.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -21,4 +22,5 @@ HEADERS += \
     ListaEnlazada.h \
     Nodo.h \
     cadena.h \
-    fecha.h
+    fecha.h \
+    matrizadyacencia.h
