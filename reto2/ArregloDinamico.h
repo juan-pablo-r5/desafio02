@@ -18,12 +18,9 @@ private:
     }
 
 public:
-    // Constructor
     ArregloDinamico(size_t capacidadInicial = 10) : capacidad(capacidadInicial), tamano(0) {
         datos = new T[capacidad];
     }
-
-    // Destructor
     ~ArregloDinamico() {
         delete[] datos;
     }
@@ -50,7 +47,6 @@ public:
         return *this;
     }
 
-    // Agregar elemento
     void agregar(const T& valor) {
         if (tamano >= capacidad) {
             redimensionar();
@@ -66,7 +62,7 @@ public:
         return datos[indice];
     }
 
-    // Obtener elemento (constante)
+    // Obtener elemento
     const T& obtener(size_t indice) const {
         if (indice >= tamano) {
             throw "Error: Indice fuera de rango en ArregloDinamico.";
@@ -74,7 +70,6 @@ public:
         return datos[indice];
     }
 
-    // Eliminar elemento por índice
     void eliminar(size_t indice) {
         if (indice >= tamano) return;
         for (size_t i = indice; i < tamano - 1; i++) {
@@ -83,7 +78,6 @@ public:
         tamano--;
     }
 
-    // Consultar tamaño y capacidad
     size_t getTamano() const {
         return tamano;
     }

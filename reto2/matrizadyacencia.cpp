@@ -1,6 +1,5 @@
 #include "MatrizAdyacencia.h"
 
-// Constructor: Reserva una matriz bidimensional dinámicamente de tamaño dim x dim
 MatrizAdyacencia::MatrizAdyacencia(size_t dim) : dimension(dim) {
     matriz = new bool*[dimension];
     for (size_t i = 0; i < dimension; i++) {
@@ -11,7 +10,7 @@ MatrizAdyacencia::MatrizAdyacencia(size_t dim) : dimension(dim) {
     }
 }
 
-// Destructor: Libera toda la memoria reservada en el heap para evitar fugas (memory leaks)
+// Destructor: Libera toda la memoria reservada
 MatrizAdyacencia::~MatrizAdyacencia() {
     for (size_t i = 0; i < dimension; i++) {
         delete[] matriz[i];
@@ -30,16 +29,13 @@ MatrizAdyacencia::MatrizAdyacencia(const MatrizAdyacencia& otro) : dimension(otr
     }
 }
 
-// Operador de asignación
 MatrizAdyacencia& MatrizAdyacencia::operator=(const MatrizAdyacencia& otro) {
     if (this != &otro) {
-        // Liberar matriz actual
         for (size_t i = 0; i < dimension; i++) {
             delete[] matriz[i];
         }
         delete[] matriz;
 
-        // Copiar nueva dimensión y asignar
         dimension = otro.dimension;
         matriz = new bool*[dimension];
         for (size_t i = 0; i < dimension; i++) {
@@ -52,7 +48,6 @@ MatrizAdyacencia& MatrizAdyacencia::operator=(const MatrizAdyacencia& otro) {
     return *this;
 }
 
-// Conectar dos usuarios (Grafo no dirigido: simetría en la matriz)
 void MatrizAdyacencia::conectar(size_t u1, size_t u2) {
     if (u1 < dimension && u2 < dimension) {
         matriz[u1][u2] = true;
@@ -60,7 +55,6 @@ void MatrizAdyacencia::conectar(size_t u1, size_t u2) {
     }
 }
 
-// Desconectar dos usuarios
 void MatrizAdyacencia::desconectar(size_t u1, size_t u2) {
     if (u1 < dimension && u2 < dimension) {
         matriz[u1][u2] = false;
@@ -68,7 +62,6 @@ void MatrizAdyacencia::desconectar(size_t u1, size_t u2) {
     }
 }
 
-// Verificar si dos usuarios están conectados
 bool MatrizAdyacencia::estanConectados(size_t u1, size_t u2) const {
     if (u1 < dimension && u2 < dimension) {
         return matriz[u1][u2];
@@ -90,7 +83,7 @@ int MatrizAdyacencia::obtenerAmigosEnComun(size_t u1, size_t u2) const {
     return contadorAmigosEnComun;
 }
 
-// Redimensionar la matriz dinámicamente si se agregan más usuarios de los previstos
+// Redimensionar la matriz dinamicamente si se agregan mas usuarios de los previstos
 void MatrizAdyacencia::redimensionar(size_t nuevaDimension) {
     if (nuevaDimension <= dimension) return;
 

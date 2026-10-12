@@ -9,10 +9,7 @@ private:
     size_t tamano;
 
 public:
-    // Constructor por defecto
     ListaEnlazada() : cabeza(nullptr), tamano(0) {}
-
-    // Destructor
     ~ListaEnlazada() {
         limpiar();
     }
@@ -26,7 +23,7 @@ public:
         }
     }
 
-    // Operador de asignación
+    // Operador de asignacion
     ListaEnlazada& operator=(const ListaEnlazada& otro) {
         if (this != &otro) {
             limpiar();
@@ -54,7 +51,7 @@ public:
         tamano++;
     }
 
-    // Obtener elemento por índice
+    // Obtener elemento
     T& obtener(size_t indice) {
         if (indice >= tamano) {
             throw "Error: Indice fuera de rango en ListaEnlazada.";
@@ -85,7 +82,6 @@ public:
         tamano--;
     }
 
-    // Consultar tamaño
     size_t getTamano() const {
         return tamano;
     }

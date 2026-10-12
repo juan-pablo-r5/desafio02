@@ -8,7 +8,7 @@ Mensaje::Mensaje()
 Mensaje::Mensaje(const Cadena& emisor, const Cadena& receptor, const Cadena& texto, const Fecha& fecha)
     : emisorUsername(emisor), receptorUsername(receptor), contenido(texto), fechaEnvio(fecha), leido(false) {}
 
-// Getters
+
 const Cadena& Mensaje::getEmisor() const {
     return emisorUsername;
 }
@@ -29,7 +29,6 @@ bool Mensaje::esLeido() const {
     return leido;
 }
 
-// Cambiar estado del mensaje
 void Mensaje::marcarComoLeido() {
     leido = true;
 }
