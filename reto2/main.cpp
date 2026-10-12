@@ -60,8 +60,10 @@ int main() {
     red.conectar(1, 2); // Usuario 1 es amigo de Usuario 2
     red.conectar(1, 3); // Usuario 1 es amigo de Usuario 3
 
+
     std::cout << "Son amigos 0 y 1? " << (red.estanConectados(0, 1) ? "SI" : "NO") << std::endl;
-    std::cout << "Son amigos 0 y 3? " << (red.estanConectados(0, 3) ? "SI" : "NO") << std::endl;
+    std::cout << "¿Son amigos 0 y 1? " << (red.estanConectados(0, 1) ? "SI" : "NO") << std::endl;
+
 
     // Ambos son amigos del Usuario 1, por lo que deberían tener 1 amigo en común.
     int comunes = red.obtenerAmigosEnComun(0, 3);

@@ -80,3 +80,8 @@ Cadena Cadena::operator+(const Cadena& otra) const {
 
 const char* Cadena::getBuffer() const { return buffer; }
 size_t Cadena::getLongitud() const { return longitud; }
+
+std::ostream& operator<<(std::ostream& os, const Cadena& cadena) {
+    os << cadena.buffer;
+    return os;
+}

@@ -9,6 +9,9 @@ CONFIG += c++17 cmdline
 SOURCES += \
         album.cpp \
         foto.cpp \
+        GestorArchivos.cpp \
+        MedidorRecursos.cpp \
+        Usuario.cpp \
         main.cpp \
         cadena.cpp \
         fecha.cpp \
@@ -24,11 +27,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ArregloDinamico.h \
     ListaEnlazada.h \
-    Nodo.h \
     album.h \
+    foto.h \
+    GestorArchivos.h \
+    MedidorRecursos.h \
+    Nodo.h \
+    Usuario.h \
     cadena.h \
     fecha.h \
-    foto.h \
     matrizadyacencia.h \
     mensaje.h \
     solicitudamistad.h
