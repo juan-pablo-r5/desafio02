@@ -2,6 +2,7 @@
 #define CADENA_H
 
 #include <cstddef>
+#include <ostream>
 
 class Cadena {
 private:
@@ -21,6 +22,8 @@ public:
 
     const char* getBuffer() const;
     size_t getLongitud() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Cadena& cadena);
 };
 
 #endif // CADENA_H
