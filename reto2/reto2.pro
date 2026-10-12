@@ -7,6 +7,7 @@ CONFIG += c++17 cmdline
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        GestorArchivos.cpp \
         Usuario.cpp \
         main.cpp \
         cadena.cpp \
@@ -22,6 +23,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     ArregloDinamico.h \
+    GestorArchivos.h \
     ListaEnlazada.h \
     Nodo.h \
     Usuario.h \
