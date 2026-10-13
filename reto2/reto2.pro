@@ -17,7 +17,8 @@ SOURCES += \
         fecha.cpp \
         matrizadyacencia.cpp \
         mensaje.cpp \
-        solicitudamistad.cpp
+        solicitudamistad.cpp \
+        udeabooksystem.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -37,4 +38,5 @@ HEADERS += \
     fecha.h \
     matrizadyacencia.h \
     mensaje.h \
-    solicitudamistad.h
+    solicitudamistad.h \
+    udeabooksystem.h
