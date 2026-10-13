@@ -62,7 +62,7 @@ int main() {
 
 
     std::cout << "Son amigos 0 y 1? " << (red.estanConectados(0, 1) ? "SI" : "NO") << std::endl;
-    std::cout << "¿Son amigos 0 y 1? " << (red.estanConectados(0, 1) ? "SI" : "NO") << std::endl;
+    std::cout << "Son amigos 0 y 1? " << (red.estanConectados(0, 3) ? "SI" : "NO") << std::endl;
 
 
     // Ambos son amigos del Usuario 1, por lo que deberían tener 1 amigo en común.

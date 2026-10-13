@@ -18,6 +18,9 @@ public:
     bool operator<(const Fecha& otra) const;
     bool operator>(const Fecha& otra) const;
     bool operator==(const Fecha& otra) const;
+    int getDia() const { return dia; }
+    int getMes() const { return mes; }
+    int getAnio() const { return anio; }
 
     Cadena toString() const;
 };

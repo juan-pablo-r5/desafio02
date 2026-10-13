@@ -26,17 +26,29 @@ private:
 
 public:
     Usuario();
-    Usuario(Cadena usr, Cadena correo, Fecha nac, Cadena cd, Cadena p, Fecha insc, Cadena rutaFoto);
+    Usuario(const Cadena& usr, const Cadena& correo, const Fecha& nac,
+            const Cadena& cd, const Cadena& p, const Fecha& insc, const Cadena& rutaFoto);
 
     void agregarAmigo(Usuario* amigo);
     void agregarAlbum(const Album& album);
-    void enviarMensaje(Usuario* destinatario, Cadena contenido);
+    void enviarMensaje(Usuario* destinatario, const Cadena& contenido);
     void recibirMensaje(const Mensaje& msj);
+    void agregarSolicitud(const SolicitudAmistad& solicitud); // F
 
-    Cadena getUsername() const;
+    // (Faltaban para ver perfiles)
+    const Cadena& getUsername() const;
+    const Cadena& getEmail() const;
+    const Cadena& getCiudad() const;
+    const Cadena& getPais() const;
+    const Fecha& getFechaNacimiento() const;
+    const Fecha& getFechaInscripcion() const;
+    const Cadena& getRutaFotoPerfil() const;
+
     ListaEnlazada<Usuario*>& getAmigos();
     ListaEnlazada<Album>& getAlbumes();
+    ListaEnlazada<Mensaje>& getMensajesEnviados();     // F
     ListaEnlazada<Mensaje>& getMensajesRecibidos();
+    ListaEnlazada<SolicitudAmistad>& getSolicitudes(); // F
 };
 
 #endif // USUARIO_H
