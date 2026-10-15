@@ -10,7 +10,6 @@ MatrizAdyacencia::MatrizAdyacencia(size_t dim) : dimension(dim) {
     }
 }
 
-// Destructor: Libera toda la memoria reservada
 MatrizAdyacencia::~MatrizAdyacencia() {
     for (size_t i = 0; i < dimension; i++) {
         delete[] matriz[i];
@@ -18,7 +17,6 @@ MatrizAdyacencia::~MatrizAdyacencia() {
     delete[] matriz;
 }
 
-// Constructor de copia
 MatrizAdyacencia::MatrizAdyacencia(const MatrizAdyacencia& otro) : dimension(otro.dimension) {
     matriz = new bool*[dimension];
     for (size_t i = 0; i < dimension; i++) {
@@ -69,7 +67,7 @@ bool MatrizAdyacencia::estanConectados(size_t u1, size_t u2) const {
     return false;
 }
 
-// Algoritmo eficiente para calcular amigos en común (crucial para sugerencias de amistad)
+// Algoritmo eficiente para calcular amigos en comun (crucial para sugerencias de amistad)
 int MatrizAdyacencia::obtenerAmigosEnComun(size_t u1, size_t u2) const {
     if (u1 >= dimension || u2 >= dimension) return 0;
 

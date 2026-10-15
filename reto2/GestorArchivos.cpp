@@ -56,8 +56,19 @@ bool GestorArchivos::guardarUsuarios(const Cadena& rutaArchivo, const ArregloDin
     if (!archivo.is_open()) return false;
 
     for (size_t i = 0; i < usuarios.getTamano(); i++) {
-        archivo << usuarios.obtener(i)->getUsername() << ";";
-        archivo << "email_default;1;1;2000;Ciudad;Pais;1;1;2026;ruta.jpg\n";
+        Usuario* u = usuarios.obtener(i);
+
+        archivo << u->getUsername() << ";"
+                << u->getEmail() << ";"
+                << u->getFechaNacimiento().getDia() << ";"
+                << u->getFechaNacimiento().getMes() << ";"
+                << u->getFechaNacimiento().getAnio() << ";"
+                << u->getCiudad() << ";"
+                << u->getPais() << ";"
+                << u->getFechaInscripcion().getDia() << ";"
+                << u->getFechaInscripcion().getMes() << ";"
+                << u->getFechaInscripcion().getAnio() << ";"
+                << u->getRutaFotoPerfil() << "\n";
     }
 
     archivo.close();

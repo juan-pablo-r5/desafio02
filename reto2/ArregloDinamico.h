@@ -1,6 +1,8 @@
 #ifndef ARREGLODINAMICO_H
 #define ARREGLODINAMICO_H
+#include <cstddef>
 template <typename T>
+
 class ArregloDinamico {
 private:
     T* datos;

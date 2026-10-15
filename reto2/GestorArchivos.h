@@ -14,10 +14,9 @@ public:
     GestorArchivos();
 
     bool cargarUsuarios(const Cadena& rutaArchivo, ArregloDinamico<Usuario*>& usuarios);
-    bool guardarUsuarios(const Cadena& rutaArchivo, const ArregloDinamico<Usuario*>& usuarios);
-
     bool cargarRelaciones(const Cadena& rutaArchivo, MatrizAdyacencia& matriz);
     bool guardarRelaciones(const Cadena& rutaArchivo, const MatrizAdyacencia& matriz);
+    bool guardarUsuarios(const Cadena& rutaArchivo, const ArregloDinamico<Usuario*>& usuarios);
 };
 
 #endif // GESTORARCHIVOS_H
