@@ -2,62 +2,38 @@
 #include "UdeABookSystem.h"
 #include "Cadena.h"
 
-void mostrarMenu() {
-    std::cout << "\n=== RED SOCIAL UDEABOOK ===\n";
-    std::cout << "1. Cargar datos del sistema\n";
-    std::cout << "2. Ver cantidad de usuarios\n";
-    std::cout << "3. Ver detalles del primer usuario\n";
-    std::cout << "4. Mostrar metricas de rendimiento\n";
-    std::cout << "5. Guardar y Salir\n";
-    std::cout << "Ingrese una opcion: ";
-}
-
 int main() {
+    std::cout << "=== INICIANDO PRUEBAS PARCIALES DE UDEABOOK ===\n";
+
     UdeABookSystem sistema;
+
+    // Define las rutas de tus archivos de texto plano
     Cadena archivoUsuarios("usuarios.txt");
     Cadena archivoRelaciones("relaciones.txt");
 
-    bool ejecutando = true;
-    int opcion = 0;
+    std::cout << "\n[1] Intentando cargar datos desde archivos...\n";
+    bool cargado = sistema.cargarDatos(archivoUsuarios, archivoRelaciones);
 
-    while (ejecutando) {
-        mostrarMenu();
-        std::cin >> opcion;
+    if (cargado) {
+        std::cout << ">> ¡Carga exitosa!\n";
+        std::cout << ">> Total de usuarios en el sistema: " << sistema.getCantidadUsuarios() << "\n";
 
-        switch (opcion) {
-        case 1:
-            if (sistema.cargarDatos(archivoUsuarios, archivoRelaciones)) {
-                std::cout << "Datos cargados correctamente en memoria.\n";
-            } else {
-                std::cout << "Fallo al cargar los archivos.\n";
+        // Prueba rápida de obtención de un usuario
+        if (sistema.getCantidadUsuarios() > 0) {
+            Usuario* primerUsuario = sistema.obtenerUsuario(0);
+            if (primerUsuario != nullptr) {
+                std::cout << ">> Primer usuario verificado: " << primerUsuario->getUsername() << "\n";
             }
-            break;
-        case 2:
-            std::cout << "Total de usuarios activos: " << sistema.getCantidadUsuarios() << "\n";
-            break;
-        case 3:
-            if (sistema.getCantidadUsuarios() > 0) {
-                Usuario* primer = sistema.obtenerUsuario(0);
-                if (primer != nullptr) {
-                    std::cout << "Username: " << primer->getUsername() << "\n";
-                }
-            } else {
-                std::cout << "No hay usuarios cargados.\n";
-            }
-            break;
-        case 4:
-            sistema.getMedidor().mostrarReporte();
-            break;
-        case 5:
-            sistema.guardarDatos(archivoUsuarios, archivoRelaciones);
-            std::cout << "Datos guardados. Saliendo...\n";
-            ejecutando = false;
-            break;
-        default:
-            std::cout << "Opcion no valida.\n";
-            break;
         }
+    } else {
+        std::cout << ">> [Aviso] No se pudieron cargar los archivos.\n";
+        std::cout << "   Asegurate de colocar 'usuarios.txt' y 'relaciones.txt' en la carpeta de compilacion/ejecucion de Qt Creator.\n";
     }
 
+    // [2] Imprimir el reporte del medidor de recursos obligatorio
+    std::cout << "\n[3] Obteniendo metricas de rendimiento...\n";
+    sistema.getMedidor().mostrarReporte();
+
+    std::cout << "\n=== FIN DE LA PRUEBA PARCIAL ===\n";
     return 0;
 }

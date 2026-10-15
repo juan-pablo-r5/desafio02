@@ -1,0 +1,12 @@
+juan_perez;juan@mail.com;12;5;1995;Medellin;Colombia;10;1;2024;/fotos/juan.jpg
+maria_gomez;maria@mail.com;20;10;1998;Bogota;Colombia;12;1;2024;/fotos/maria.jpg
+carlos_ruiz;carlos@mail.com;15;1;2000;Cali;Colombia;15;1;2024;/fotos/carlos.jpg
+juan_perez;juan@mail.com;12;5;1995;Medellin;Colombia;10;1;2024;/fotos/juan.jpg
+maria_gomez;maria@mail.com;20;10;1998;Bogota;Colombia;12;1;2024;/fotos/maria.jpg
+carlos_ruiz;carlos@mail.com;15;1;2000;Cali;Colombia;15;1;2024;/fotos/carlos.jpg
+juan_perez;juan@mail.com;12;5;1995;Medellin;Colombia;10;1;2024;/fotos/juan.jpg
+maria_gomez;maria@mail.com;20;10;1998;Bogota;Colombia;12;1;2024;/fotos/maria.jpg
+carlos_ruiz;carlos@mail.com;15;1;2000;Cali;Colombia;15;1;2024;/fotos/carlos.jpg
+juan_perez;juan@mail.com;12;5;1995;Medellin;Colombia;10;1;2024;/fotos/juan.jpg
+maria_gomez;maria@mail.com;20;10;1998;Bogota;Colombia;12;1;2024;/fotos/maria.jpg
+carlos_ruiz;carlos@mail.com;15;1;2000;Cali;Colombia;15;1;2024;/fotos/carlos.jpg

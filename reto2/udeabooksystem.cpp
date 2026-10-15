@@ -8,7 +8,7 @@ UdeABookSystem::UdeABookSystem()
 UdeABookSystem::~UdeABookSystem() {
     size_t tam = usuarios.getTamano();
     for (size_t i = 0; i < tam; i++) {
-        delete usuarios.obtener(i); // Liberamos cada Usuario* creado con new
+        delete usuarios.obtener(i);
     }
 }
 
@@ -31,25 +31,24 @@ bool UdeABookSystem::cargarDatos(const Cadena& rutaUsuarios, const Cadena& rutaR
         return false;
     }
 
-    // Redimensionar cantidad usuario
     size_t totalUsuarios = usuarios.getTamano();
     matrizAdyacencia = MatrizAdyacencia(totalUsuarios > 0 ? totalUsuarios : 100);
 
-    //  Cargar relaciones de amistad
     bool exitoRelaciones = gestorArchivos.cargarRelaciones(rutaRelaciones, matrizAdyacencia);
     if (!exitoRelaciones) {
-        std::cout << "Aviso: No se pudo cargar el archivo de relaciones o está vacío.\n";
+        std::cout << "No se pudo cargar el archivo de relaciones o esta vacio.\n";
     }
 
+    // Registro "en bloque" desde el sistema central para no tocar el GestorArchivos
+    medidor.registrarIteracion(totalUsuarios);
     medidor.registrarMemoria(totalUsuarios * sizeof(Usuario*));
+
     return true;
 }
 
-// Guardado seguro al salir
 bool UdeABookSystem::guardarDatos(const Cadena& rutaUsuarios, const Cadena& rutaRelaciones) {
     bool guardadoU = gestorArchivos.guardarUsuarios(rutaUsuarios, usuarios);
     bool guardadoR = gestorArchivos.guardarRelaciones(rutaRelaciones, matrizAdyacencia);
-
     return guardadoU && guardadoR;
 }
 
