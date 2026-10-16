@@ -67,3 +67,256 @@ Usuario* UdeABookSystem::obtenerUsuario(size_t indice) {
 const MedidorRecursos& UdeABookSystem::getMedidor() const {
     return medidor;
 }
+
+// ==========================================
+// 1. GESTIÓN DE AMISTADES Y SUGERENCIAS
+// ==========================================
+
+bool UdeABookSystem::enviarSolicitud(size_t emisorIndex, const Cadena& usernameReceptor) {
+    int receptorIndex = buscarIndiceUsuario(usernameReceptor);
+    if (receptorIndex < 0 || static_cast<size_t>(receptorIndex) == emisorIndex) {
+        return false;
+    }
+
+    size_t recIdx = static_cast<size_t>(receptorIndex);
+
+    // Validar si ya son amigos en la matriz
+    medidor.registrarIteracion(1);
+    if (matrizAdyacencia.estanConectados(emisorIndex, recIdx)) {
+        return false; // Ya son amigos
+    }
+
+    Usuario* uEmisor = usuarios.obtener(emisorIndex);
+    Usuario* uReceptor = usuarios.obtener(recIdx);
+
+    // Validar si ya existe solicitud pendiente
+    ListaEnlazada<SolicitudAmistad>& listaSol = uReceptor->getSolicitudes();
+    size_t totalSol = listaSol.getTamano();
+    for (size_t i = 0; i < totalSol; i++) {
+        medidor.registrarIteracion(1);
+        if (listaSol.obtener(i).getRemitente() == uEmisor->getUsername() &&
+            listaSol.obtener(i).getEstado() == EstadoSolicitud::PENDIENTE) {
+            return false; // Solicitud ya enviada previamente
+        }
+    }
+
+    Fecha fechaActual;
+    SolicitudAmistad nuevaSolicitud(uEmisor->getUsername(), uReceptor->getUsername(), fechaActual);
+    uReceptor->agregarSolicitud(nuevaSolicitud);
+    medidor.registrarMemoria(sizeof(SolicitudAmistad));
+    return true;
+}
+
+bool UdeABookSystem::aceptarSolicitud(size_t receptorIndex, size_t emisorIndex) {
+    Usuario* uReceptor = usuarios.obtener(receptorIndex);
+    Usuario* uEmisor = usuarios.obtener(emisorIndex);
+
+    if (!uReceptor || !uEmisor) return false;
+
+    ListaEnlazada<SolicitudAmistad>& listaSol = uReceptor->getSolicitudes();
+    size_t totalSol = listaSol.getTamano();
+
+    for (size_t i = 0; i < totalSol; i++) {
+        medidor.registrarIteracion(1);
+        SolicitudAmistad& sol = listaSol.obtener(i);
+        if (sol.getRemitente() == uEmisor->getUsername() && sol.getEstado() == EstadoSolicitud::PENDIENTE) {
+            sol.aceptar();
+            matrizAdyacencia.conectar(receptorIndex, emisorIndex);
+            uReceptor->agregarAmigo(uEmisor);
+            uEmisor->agregarAmigo(uReceptor);
+            listaSol.eliminar(i);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool UdeABookSystem::rechazarSolicitud(size_t receptorIndex, size_t emisorIndex) {
+    Usuario* uReceptor = usuarios.obtener(receptorIndex);
+    Usuario* uEmisor = usuarios.obtener(emisorIndex);
+
+    if (!uReceptor || !uEmisor) return false;
+
+    ListaEnlazada<SolicitudAmistad>& listaSol = uReceptor->getSolicitudes();
+    size_t totalSol = listaSol.getTamano();
+
+    for (size_t i = 0; i < totalSol; i++) {
+        medidor.registrarIteracion(1);
+        SolicitudAmistad& sol = listaSol.obtener(i);
+        if (sol.getRemitente() == uEmisor->getUsername() && sol.getEstado() == EstadoSolicitud::PENDIENTE) {
+            sol.rechazar();
+            listaSol.eliminar(i);
+            return true;
+        }
+    }
+    return false;
+}
+
+ArregloDinamico<size_t> UdeABookSystem::amigosEnComun(size_t u1, size_t u2) {
+    ArregloDinamico<size_t> comunes;
+    size_t dim = matrizAdyacencia.getDimension();
+    for (size_t j = 0; j < dim; j++) {
+        medidor.registrarIteracion(1);
+        if (matrizAdyacencia.estanConectados(u1, j) && matrizAdyacencia.estanConectados(u2, j)) {
+            comunes.agregar(j);
+        }
+    }
+    return comunes;
+}
+
+// Sugerencias de amistad (Punto V): ordenadas por cantidad de amigos en común
+ArregloDinamico<size_t> UdeABookSystem::obtenerSugerenciasAmistad(size_t usuarioIndex, size_t K) {
+    size_t total = usuarios.getTamano();
+    ArregloDinamico<size_t> candidatos;
+    ArregloDinamico<int> puntajes;
+
+    for (size_t i = 0; i < total; i++) {
+        medidor.registrarIteracion(1);
+        // No sugerirse a sí mismo, ni a quienes ya son amigos directos
+        if (i != usuarioIndex && !matrizAdyacencia.estanConectados(usuarioIndex, i)) {
+            int comunes = matrizAdyacencia.obtenerAmigosEnComun(usuarioIndex, i);
+            if (comunes > 0) {
+                candidatos.agregar(i);
+                puntajes.agregar(comunes);
+            }
+        }
+    }
+
+    // Ordenamiento por burbuja descendente según amigos en común (sin STL)
+    size_t n = candidatos.getTamano();
+    for (size_t i = 0; i < n; i++) {
+        for (size_t j = i + 1; j < n; j++) {
+            medidor.registrarIteracion(1);
+            if (puntajes.obtener(j) > puntajes.obtener(i)) {
+                // Intercambiar puntajes
+                int tempP = puntajes.obtener(i);
+                puntajes.obtener(i) = puntajes.obtener(j);
+                puntajes.obtener(j) = tempP;
+
+                // Intercambiar candidatos
+                size_t tempC = candidatos.obtener(i);
+                candidatos.obtener(i) = candidatos.obtener(j);
+                candidatos.obtener(j) = tempC;
+            }
+        }
+    }
+
+    // Retornar máximo K sugerencias
+    ArregloDinamico<size_t> resultado;
+    size_t limite = (n < K) ? n : K;
+    for (size_t i = 0; i < limite; i++) {
+        resultado.agregar(candidatos.obtener(i));
+    }
+    return resultado;
+}
+
+// ==========================================
+// 2. SISTEMA DE MENSAJERÍA
+// ==========================================
+
+bool UdeABookSystem::enviarMensaje(size_t emisorIndex, const Cadena& usernameReceptor, const Cadena& contenido) {
+    if (contenido.getLongitud() > 512) return false; // Límite de 512 caracteres
+
+    int receptorIndex = buscarIndiceUsuario(usernameReceptor);
+    if (receptorIndex < 0) return false;
+
+    Usuario* uEmisor = usuarios.obtener(emisorIndex);
+    Usuario* uReceptor = usuarios.obtener(static_cast<size_t>(receptorIndex));
+
+    if (!uEmisor || !uReceptor) return false;
+
+    uEmisor->enviarMensaje(uReceptor, contenido);
+    medidor.registrarMemoria(sizeof(Mensaje));
+    return true;
+}
+
+ArregloDinamico<Mensaje> UdeABookSystem::obtenerMensajesNoLeidos(size_t usuarioIndex) {
+    Usuario* u = usuarios.obtener(usuarioIndex);
+    ArregloDinamico<Mensaje> noLeidos;
+    if (!u) return noLeidos;
+
+    ListaEnlazada<Mensaje>& recibidos = u->getMensajesRecibidos();
+    size_t n = recibidos.getTamano();
+
+    // Filtrar no leídos
+    for (size_t i = 0; i < n; i++) {
+        medidor.registrarIteracion(1);
+        Mensaje& m = recibidos.obtener(i);
+        if (!m.esLeido()) {
+            noLeidos.agregar(m);
+            m.marcarComoLeido(); // Se marcan como leídos al consultarse según requerimiento
+        }
+    }
+
+    // Ordenamiento cronológico ascendente (más antiguo al más reciente) usando sobrecarga de Fecha
+    size_t totalNL = noLeidos.getTamano();
+    for (size_t i = 0; i < totalNL; i++) {
+        for (size_t j = i + 1; j < totalNL; j++) {
+            medidor.registrarIteracion(1);
+            if (noLeidos.obtener(i).getFechaEnvio() > noLeidos.obtener(j).getFechaEnvio()) {
+                Mensaje temp = noLeidos.obtener(i);
+                noLeidos.obtener(i) = noLeidos.obtener(j);
+                noLeidos.obtener(j) = temp;
+            }
+        }
+    }
+
+    return noLeidos;
+}
+
+ArregloDinamico<Mensaje> UdeABookSystem::buscarMensajesPorRangoFecha(size_t usuarioIndex, const Fecha& inicio, const Fecha& fin) {
+    Usuario* u = usuarios.obtener(usuarioIndex);
+    ArregloDinamico<Mensaje> resultado;
+    if (!u) return resultado;
+
+    ListaEnlazada<Mensaje>& recibidos = u->getMensajesRecibidos();
+    size_t n = recibidos.getTamano();
+
+    for (size_t i = 0; i < n; i++) {
+        medidor.registrarIteracion(1);
+        Mensaje& m = recibidos.obtener(i);
+        const Fecha& f = m.getFechaEnvio();
+
+        // Verificar rango inclusive: inicio <= f <= fin
+        if (!(f < inicio) && !(fin < f)) {
+            resultado.agregar(m);
+        }
+    }
+    return resultado;
+}
+
+// ==========================================
+// 3. MULTIMEDIA Y PRIVACIDAD
+// ==========================================
+
+bool UdeABookSystem::validarPermisoAcceso(size_t idConsultor, size_t idDuenio, Privacidad nivelPrivacidad) {
+    medidor.registrarIteracion(1);
+    if (idConsultor == idDuenio) {
+        return true; // Acceso total al propietario
+    }
+    if (nivelPrivacidad == Privacidad::PUBLICO) {
+        return true; // Público
+    }
+    if (nivelPrivacidad == Privacidad::AMIGOS) {
+        return matrizAdyacencia.estanConectados(idConsultor, idDuenio); // Amigos directos
+    }
+    return false; // Privado
+}
+
+ArregloDinamico<Album> UdeABookSystem::obtenerAlbumesVisibles(size_t idConsultor, size_t idDuenio) {
+    ArregloDinamico<Album> albumesVisibles;
+    Usuario* duenio = usuarios.obtener(idDuenio);
+    if (!duenio) return albumesVisibles;
+
+    ListaEnlazada<Album>& listaAlbumes = duenio->getAlbumes();
+    size_t total = listaAlbumes.getTamano();
+
+    for (size_t i = 0; i < total; i++) {
+        medidor.registrarIteracion(1);
+        Album& alb = listaAlbumes.obtener(i);
+        if (validarPermisoAcceso(idConsultor, idDuenio, alb.getPrivacidad())) {
+            albumesVisibles.agregar(alb);
+        }
+    }
+    return albumesVisibles;
+}

@@ -1,11 +1,22 @@
 #include "Fecha.h"
+#include <ctime>
 
 Fecha::Fecha() {
-    dia = 1;
-    mes = 1;
-    anio = 2000;
-    hora = 0;
-    minuto = 0;
+    std::time_t t = std::time(nullptr);
+    std::tm* now = std::localtime(&t);
+    if (now != nullptr) {
+        dia = now->tm_mday;
+        mes = now->tm_mon + 1;
+        anio = now->tm_year + 1900;
+        hora = now->tm_hour;
+        minuto = now->tm_min;
+    } else {
+        dia = 1;
+        mes = 1;
+        anio = 2000;
+        hora = 0;
+        minuto = 0;
+    }
 }
 
 Fecha::Fecha(int d, int m, int a, int h, int min) {
