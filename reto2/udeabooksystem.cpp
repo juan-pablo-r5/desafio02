@@ -9,6 +9,7 @@ UdeABookSystem::~UdeABookSystem() {
     size_t tam = usuarios.getTamano();
     for (size_t i = 0; i < tam; i++) {
         delete usuarios.obtener(i); // Liberamos cada Usuario* creado con new
+
     }
 }
 
@@ -30,7 +31,6 @@ bool UdeABookSystem::cargarDatos(const Cadena& rutaUsuarios, const Cadena& rutaR
         std::cout << "Error al cargar el archivo de usuarios.\n";
         return false;
     }
-
     // Redimensionar cantidad usuario
     size_t totalUsuarios = usuarios.getTamano();
     matrizAdyacencia = MatrizAdyacencia(totalUsuarios > 0 ? totalUsuarios : 100);
@@ -49,7 +49,6 @@ bool UdeABookSystem::cargarDatos(const Cadena& rutaUsuarios, const Cadena& rutaR
 bool UdeABookSystem::guardarDatos(const Cadena& rutaUsuarios, const Cadena& rutaRelaciones) {
     bool guardadoU = gestorArchivos.guardarUsuarios(rutaUsuarios, usuarios);
     bool guardadoR = gestorArchivos.guardarRelaciones(rutaRelaciones, matrizAdyacencia);
-
     return guardadoU && guardadoR;
 }
 
@@ -301,3 +300,4 @@ ArregloDinamico<Album> UdeABookSystem::obtenerAlbumesVisibles(size_t idConsultor
     }
     return albumesVisibles;
 }
+

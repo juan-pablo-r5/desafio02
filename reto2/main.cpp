@@ -123,6 +123,10 @@ int main() {
     std::cout << "\n--------------------------------------------------\n";
     std::cout << "[6] MÉTRICAS DE RENDIMIENTO FINALES\n";
     std::cout << "--------------------------------------------------\n";
+
+
+    // [2] Imprimir el reporte del medidor de recursos obligatorio
+    std::cout << "\n[3] Obteniendo metricas de rendimiento...\n";
     sistema.getMedidor().mostrarReporte();
 
     std::cout << "\n=== FIN DE LA PRUEBA PARCIAL ===\n";

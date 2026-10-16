@@ -1,6 +1,5 @@
 #ifndef UDEABOOKSYSTEM_H
 #define UDEABOOKSYSTEM_H
-
 #include "ArregloDinamico.h"
 #include "MatrizAdyacencia.h"
 #include "GestorArchivos.h"
@@ -12,7 +11,10 @@
 #include "Album.h"
 #include "SolicitudAmistad.h"
 
-class UdeABookSystem {
+
+class UdeABookSystem
+{
+
 private:
     ArregloDinamico<Usuario*> usuarios;
     MatrizAdyacencia matrizAdyacencia;
@@ -44,6 +46,9 @@ public:
 
     bool validarPermisoAcceso(size_t idConsultor, size_t idDuenio, Privacidad nivelPrivacidad);
     ArregloDinamico<Album> obtenerAlbumesVisibles(size_t idConsultor, size_t idDuenio);
+
+
+
 };
 
 #endif // UDEABOOKSYSTEM_H
