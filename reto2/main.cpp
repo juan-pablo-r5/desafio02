@@ -5,20 +5,18 @@
 #include "Cadena.h"
 #include "Fecha.h"
 
-// Función auxiliar para pausar la consola después de cada acción
 void pausar() {
     std::cout << "\nPresione ENTER para continuar...";
     std::cin.ignore(10000, '\n');
     std::cin.get();
 }
 
-// 1. Operación de Entrada: Algoritmo de probabilidad ponderada para fotos (1x, 2.5x, 3.5x)
 void mostrarFotosPerfilAmigos(Usuario* usuarioActivo, UdeABookSystem& sistema) {
     ListaEnlazada<Usuario*>& amigos = usuarioActivo->getAmigos();
     size_t totalAmigos = amigos.getTamano();
 
     std::cout << "\n--------------------------------------------------\n";
-    std::cout << "📸 FOTOS DE PERFIL DE AMIGOS (Destacadas):\n";
+    std::cout << " FOTOS DE PERFIL DE AMIGOS (Destacadas):\n";
     std::cout << "--------------------------------------------------\n";
 
     if (totalAmigos == 0) {
@@ -34,11 +32,11 @@ void mostrarFotosPerfilAmigos(Usuario* usuarioActivo, UdeABookSystem& sistema) {
         int idxAmigo = sistema.buscarIndiceUsuario(amigo->getUsername());
         int comunes = sistema.amigosEnComun(idxActivo, idxAmigo).getTamano();
 
-        int peso = 2; // <= 10 amigos en comun (Equivale a 1x)
+        int peso = 2;
         if (comunes >= 11 && comunes <= 20) {
-            peso = 5; // Equivale a 2.5x
+            peso = 5;
         } else if (comunes >= 21) {
-            peso = 7; // Equivale a 3.5x
+            peso = 7;
         }
 
         for (int p = 0; p < peso; p++) {
@@ -63,7 +61,6 @@ void mostrarFotosPerfilAmigos(Usuario* usuarioActivo, UdeABookSystem& sistema) {
     }
 }
 
-// Opción 1: Administrar Amistades
 void menuAdministrarAmistades(size_t usuarioIndex, UdeABookSystem& sistema) {
     Usuario* usuario = sistema.obtenerUsuario(usuarioIndex);
     char op = ' ';
@@ -110,7 +107,6 @@ void menuAdministrarAmistades(size_t usuarioIndex, UdeABookSystem& sistema) {
     }
 }
 
-// Opción 2: Visitar Perfil de un Amigo (Carrusel)
 void menuVisitarPerfil(size_t usuarioIndex, UdeABookSystem& sistema) {
     std::cout << "\n--- VISITAR PERFIL DE UN AMIGO ---\n";
     std::cout << "Ingrese el username del amigo: ";
@@ -171,7 +167,6 @@ void menuVisitarPerfil(size_t usuarioIndex, UdeABookSystem& sistema) {
     }
 }
 
-// Opción 4: Administrar Mensajes
 void menuMensajeria(size_t usuarioIndex, UdeABookSystem& sistema) {
     char op = ' ';
     while (op != '4') {
@@ -224,7 +219,6 @@ void menuMensajeria(size_t usuarioIndex, UdeABookSystem& sistema) {
     }
 }
 
-// 2. Operaciones del Menú Principal
 void sesionIniciada(size_t usuarioIndex, UdeABookSystem& sistema) {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     Usuario* usuario = sistema.obtenerUsuario(usuarioIndex);
@@ -276,7 +270,6 @@ void sesionIniciada(size_t usuarioIndex, UdeABookSystem& sistema) {
         } else if (opcion == '4') {
             menuMensajeria(usuarioIndex, sistema);
         } else if (opcion == 'N' || opcion == 'n') {
-            // Recargar fotos sin hacer nada más
             continue;
         }
     }
@@ -288,7 +281,6 @@ int main() {
     Cadena archivoUsuarios("usuarios.txt");
     Cadena archivoRelaciones("relaciones.txt");
 
-    // Operación Oculta (Carga Inicial Automática)
     if (!sistema.cargarDatos(archivoUsuarios, archivoRelaciones)) {
         std::cout << "Error critico al cargar los archivos. Deteniendo el sistema.\n";
         return 1;
@@ -315,7 +307,6 @@ int main() {
         }
     }
 
-    // Tecla global S/s invoca el guardado en el almacenamiento permanente
     std::cout << "\n=== Guardando datos en almacenamiento permanente... ===\n";
     sistema.guardarDatos(archivoUsuarios, archivoRelaciones);
     std::cout << "=== Sistema apagado exitosamente ===\n";
