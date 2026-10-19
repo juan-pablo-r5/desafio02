@@ -122,3 +122,81 @@ bool GestorArchivos::guardarRelaciones(const Cadena& rutaArchivo, const MatrizAd
     archivo.close();
     return true;
 }
+
+bool GestorArchivos::cargarAlbumes(const Cadena& rutaArchivo, ArregloDinamico<Usuario*>& usuarios) {
+    std::ifstream archivo(rutaArchivo.getBuffer());
+    if (!archivo.is_open()) {
+        // Fallback de seguridad: Si no existe el archivo,
+        // asignamos un álbum por defecto a cada usuario.
+        for (size_t i = 0; i < usuarios.getTamano(); i++) {
+            Usuario* u = usuarios.obtener(i);
+            Album albumDefault(Cadena("MisFotosDefault"), Privacidad::PUBLICO);
+            Fecha fechaActual(1, 1, 2026, 12, 0);
+
+            // Creamos una foto de prueba usando la ruta de perfil del usuario
+            Cadena rutaFoto = u->getRutaFotoPerfil();
+            Foto fotoDefault(rutaFoto, fechaActual);
+            albumDefault.agregarFoto(fotoDefault);
+
+            u->agregarAlbum(albumDefault);
+        }
+        return true;
+    }
+
+    char linea[1024];
+    while (archivo.getline(linea, 1024)) {
+        char campos[4][300];
+        int col = 0, pos = 0;
+
+        for (int i = 0; linea[i] != '\0'; i++) {
+            if (linea[i] == ';') {
+                campos[col][pos] = '\0';
+                col++;
+                pos = 0;
+                if (col > 3) break;
+            } else {
+                campos[col][pos++] = linea[i];
+            }
+        }
+        campos[col][pos] = '\0';
+
+        if (col >= 2) {
+            Cadena username(campos[0]);
+            Cadena nombreAlbum(campos[1]);
+            int privInt = parseEntero(campos[2]);
+            Privacidad priv = (privInt == 0) ? Privacidad::PUBLICO : (privInt == 1) ? Privacidad::PRIVADO : Privacidad::AMIGOS;
+
+            Album nuevoAlbum(nombreAlbum, priv); // Asegurate de que el constructor coincida
+            char rutaFotoBuffer[300];
+            int rPos = 0;
+            for (int i = 0; campos[3][i] != '\0'; i++) {
+                if (campos[3][i] == '|') {
+                    rutaFotoBuffer[rPos] = '\0';
+                    if (rPos > 0) {
+                        Fecha f(1, 1, 2026, 0, 0);
+                        Foto foto(Cadena(rutaFotoBuffer), f);
+                        nuevoAlbum.agregarFoto(foto);
+                    }
+                    rPos = 0;
+                } else {
+                    rutaFotoBuffer[rPos++] = campos[3][i];
+                }
+            }
+            rutaFotoBuffer[rPos] = '\0';
+            if (rPos > 0) {
+                Fecha f(1, 1, 2026, 0, 0);
+                Foto foto(Cadena(rutaFotoBuffer), f);
+                nuevoAlbum.agregarFoto(foto);
+            }
+
+            for (size_t i = 0; i < usuarios.getTamano(); i++) {
+                if (usuarios.obtener(i)->getUsername() == username) {
+                    usuarios.obtener(i)->agregarAlbum(nuevoAlbum);
+                    break;
+                }
+            }
+        }
+    }
+    archivo.close();
+    return true;
+}
