@@ -32,7 +32,6 @@ bool UdeABookSystem::cargarDatos(const Cadena& rutaUsuarios, const Cadena& rutaR
         return false;
     }
 
-    // Redimensionar cantidad usuario
     size_t totalUsuarios = usuarios.getTamano();
     matrizAdyacencia = MatrizAdyacencia(totalUsuarios > 0 ? totalUsuarios : 100);
 
@@ -40,6 +39,18 @@ bool UdeABookSystem::cargarDatos(const Cadena& rutaUsuarios, const Cadena& rutaR
     bool exitoRelaciones = gestorArchivos.cargarRelaciones(rutaRelaciones, matrizAdyacencia);
     if (!exitoRelaciones) {
         std::cout << "Aviso: No se pudo cargar el archivo de relaciones o está vacío.\n";
+    }
+
+    for (size_t i = 0; i < totalUsuarios; i++) {
+        for (size_t j = i + 1; j < totalUsuarios; j++) {
+            if (matrizAdyacencia.estanConectados(i, j)) {
+                Usuario* usuario1 = usuarios.obtener(i);
+                Usuario* usuario2 = usuarios.obtener(j);
+
+                usuario1->getAmigos().agregar(usuario2);
+                usuario2->getAmigos().agregar(usuario1);
+            }
+        }
     }
 
     Cadena archivoAlbumes("albumes.txt");
