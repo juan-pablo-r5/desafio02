@@ -126,16 +126,12 @@ bool GestorArchivos::guardarRelaciones(const Cadena& rutaArchivo, const MatrizAd
 bool GestorArchivos::cargarAlbumes(const Cadena& rutaArchivo, ArregloDinamico<Usuario*>& usuarios) {
     std::ifstream archivo(rutaArchivo.getBuffer());
     if (!archivo.is_open()) {
-        // Fallback de seguridad: Si no existe el archivo,
-        // asignamos un álbum por defecto a cada usuario.
         for (size_t i = 0; i < usuarios.getTamano(); i++) {
             Usuario* u = usuarios.obtener(i);
             Album albumDefault(Cadena("MisFotosDefault"), Privacidad::PUBLICO);
             Fecha fechaActual(1, 1, 2026, 12, 0);
-
-            // Creamos una foto de prueba usando la ruta de perfil del usuario
             Cadena rutaFoto = u->getRutaFotoPerfil();
-            Foto fotoDefault(rutaFoto, fechaActual); // Ajusta según el constructor de tu Foto
+            Foto fotoDefault(rutaFoto, fechaActual);
             albumDefault.agregarFoto(fotoDefault);
 
             u->agregarAlbum(albumDefault);
@@ -166,7 +162,7 @@ bool GestorArchivos::cargarAlbumes(const Cadena& rutaArchivo, ArregloDinamico<Us
             int privInt = parseEntero(campos[2]);
             Privacidad priv = (privInt == 0) ? Privacidad::PUBLICO : (privInt == 1) ? Privacidad::PRIVADO : Privacidad::AMIGOS;
 
-            Album nuevoAlbum(nombreAlbum, priv); // Asegúrate de que el constructor coincida
+            Album nuevoAlbum(nombreAlbum, priv);
 
             char rutaFotoBuffer[300];
             int rPos = 0;
