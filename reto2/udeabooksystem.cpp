@@ -31,20 +31,23 @@ bool UdeABookSystem::cargarDatos(const Cadena& rutaUsuarios, const Cadena& rutaR
         std::cout << "Error al cargar el archivo de usuarios.\n";
         return false;
     }
+
     // Redimensionar cantidad usuario
     size_t totalUsuarios = usuarios.getTamano();
     matrizAdyacencia = MatrizAdyacencia(totalUsuarios > 0 ? totalUsuarios : 100);
 
-    //  Cargar relaciones de amistad
+    // Cargar relaciones de amistad
     bool exitoRelaciones = gestorArchivos.cargarRelaciones(rutaRelaciones, matrizAdyacencia);
     if (!exitoRelaciones) {
         std::cout << "Aviso: No se pudo cargar el archivo de relaciones o está vacío.\n";
     }
 
+    Cadena archivoAlbumes("albumes.txt");
+    gestorArchivos.cargarAlbumes(archivoAlbumes, usuarios);
+
     medidor.registrarMemoria(totalUsuarios * sizeof(Usuario*));
     return true;
 }
-
 
 bool UdeABookSystem::guardarDatos(const Cadena& rutaUsuarios, const Cadena& rutaRelaciones) {
     bool guardadoU = gestorArchivos.guardarUsuarios(rutaUsuarios, usuarios);
